@@ -30,21 +30,26 @@ button{cursor:pointer;border:0;background:none;padding:0}
 
 /* header */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}
-.mn{position:relative}
-.mnb{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border-radius:999px;font-weight:700;font-size:15px}
-.mnb:hover,.mnb[aria-expanded="true"]{background:var(--sunk)}
-.mnb svg{transition:transform .15s}.mnb[aria-expanded="true"] svg{transform:rotate(180deg)}
-.mega{position:absolute;left:0;right:0;top:100%;background:var(--bg);border-bottom:1px solid var(--line);box-shadow:0 16px 32px rgba(26,21,18,.12);max-height:calc(100vh - var(--hh) - 24px);overflow-y:auto}
-.mega .in{padding-top:24px;padding-bottom:28px}
-.mega .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
-.mega h3{margin:0 0 8px}
-.mega ul{list-style:none;margin:0;padding:0}
-.mega button{width:100%;text-align:left;min-height:40px;padding:8px 10px;border-radius:8px;font-size:15px;font-weight:500}
-.mega button:hover{background:var(--sunk)}
-.mega li button{display:flex;justify-content:space-between;gap:12px}
-.mega li b{font-variant-numeric:tabular-nums;font-weight:600}
-.mega h3 button{padding:8px 10px;font:800 22px/1 var(--display);text-transform:uppercase;letter-spacing:.02em;color:var(--brand)}
 .top>.in{height:var(--hh);display:flex;align-items:center;gap:8px}
+.mnb{display:inline-flex;align-items:center;height:40px;padding:0 14px;border-radius:999px;font-weight:700;font-size:15px;color:var(--fg);text-decoration:none}
+.mnb:hover,.mnb[aria-current="page"]{background:var(--sunk)}
+.mp{background:var(--bg)}
+.mp .in{padding-top:32px;padding-bottom:96px;max-width:860px}
+.mp h1{margin:0 0 4px;font-size:clamp(48px,11vw,80px)}
+.mp .lead{margin:0 0 8px;color:var(--muted)}
+.mp .jump{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 8px}
+.mp section{padding-top:40px;scroll-margin-top:calc(var(--hh) + 8px)}
+.mp h2{margin:0;padding-bottom:8px;border-bottom:3px solid var(--fg);font-size:clamp(32px,7vw,44px)}
+.mp .sub2{margin:8px 0 0;color:var(--muted);font-size:15px}
+.mp ul{list-style:none;margin:0;padding:0}
+.mp li{display:grid;grid-template-columns:1fr auto;gap:2px 16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.mp .nm{font-weight:600;font-size:17px}
+.mp .nt{color:var(--muted);font-size:14px}
+.mp .pr{font:700 18px/1 var(--ui);font-variant-numeric:tabular-nums;text-align:right}
+.mp .pf{color:var(--muted);font-size:13px;font-weight:500;display:block;margin-top:4px}
+.mp .acts{grid-column:1/-1;display:flex;gap:8px;margin-top:6px}
+.mp .acts button{height:36px;padding:0 16px;border-radius:999px;font-weight:700;font-size:14px;background:var(--brand);color:var(--brand-fg)}
+.mp .acts button.alt{background:var(--sunk);color:var(--fg)}
 .logo{display:flex;align-items:center;gap:8px;margin-right:auto;flex:none;min-width:0;text-decoration:none;color:inherit}
 .mark{flex:none;width:36px;height:36px;border-radius:10px;background:var(--brand);color:#fff;display:grid;place-items:center;font:900 28px/1 var(--display)}
 .word{font:800 17px/.9 var(--display);text-transform:uppercase;white-space:nowrap}
@@ -230,7 +235,7 @@ footer a{color:var(--fg);font-weight:600}
       <span class="mark" aria-hidden="true">&amp;</span>
       <span class="word">Deli &amp;<b>Hot Chicken</b></span>
     </a>
-    <div class="mn"><button class="mnb" id="mnBtn" type="button" aria-expanded="false" aria-controls="mega">Menu<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></div>
+    <a class="mnb" id="mnBtn" href="#menu">Menu</a>
     <div class="seg" role="group" aria-label="Order type">
       <button type="button" data-mode="delivery" aria-pressed="true">Delivery</button>
       <button type="button" data-mode="pickup" aria-pressed="false">Pickup</button>
@@ -241,8 +246,16 @@ footer a{color:var(--fg);font-weight:600}
       <span class="n" id="cartN" hidden>0</span>
     </button>
   </div>
-  <div class="mega" id="mega" hidden><div class="in" id="megaIn"></div></div>
 </header>
+
+<section class="mp" id="menuPage" hidden>
+  <div class="in">
+    <h1 class="d">Menu</h1>
+    <p class="lead">Prices as listed today. Pick up at 25 Academy St or get it delivered.</p>
+    <div class="jump" id="mpJump"></div>
+    <div id="mpList"></div>
+  </div>
+</section>
 
 <section class="hero" id="top">
   <div class="in">
@@ -379,7 +392,6 @@ function card(it){
     </div></article>`;
 }
 $('#menu').innerHTML = SECTIONS.map(s => `<section class="sec" id="${s.id}"><h2 class="d">${s.name}</h2>${s.lead?`<p class="lead">${s.lead}</p>`:'<p class="lead"></p>'}<div class="grid">${s.items.map(card).join('')}</div></section>`).join('');
-$('#megaIn').innerHTML = `<div class="cols">${SECTIONS.map(s => `<div><h3><button type="button" data-go="${s.id}">${s.name}</button></h3><ul>${s.items.map(i => `<li><button type="button" data-go="${s.id}" data-item="${i.id}"><span>${i.name}</span><b>${money(i.p)}</b></button></li>`).join('')}</ul></div>`).join('')}</div>`;
 $('#catList').innerHTML = SECTIONS.map(s => `<li><button class="chip" data-go="${s.id}">${s.name}</button></li>`).join('');
 
 /* ---------- toast ---------- */
@@ -588,18 +600,8 @@ function pick(on){
 }
 $('#orderNow').onclick = () => pick(true);
 $('#pickX').onclick = () => pick(false); $('#scrim2').onclick = () => pick(false);
-$('#optSite').onclick = () => { pick(false); $('#menu').scrollIntoView({behavior:'smooth'}); };
-function mega(on){ $('#mega').hidden = !on; $('#mnBtn').setAttribute('aria-expanded', on); }
-$('#mnBtn').onclick = () => mega($('#mega').hidden);
-document.addEventListener('click', e => { if(!e.target.closest('#mega, #mnBtn')) mega(false); });
-document.addEventListener('keydown', e => { if(e.key==='Escape') mega(false); });
-function go(e){
-  const b = e.target.closest('button'); if(!b) return;
-  mega(false);
-  if(b.dataset.item) (document.querySelector(`[data-id="${b.dataset.item}"]`)||document.getElementById(b.dataset.go)).scrollIntoView({behavior:'smooth',block:'center'});
-  else if(b.dataset.go) document.getElementById(b.dataset.go).scrollIntoView({behavior:'smooth'});
-}
-$('#catList').addEventListener('click', go); $('#mega').addEventListener('click', go);
+$('#optSite').onclick = () => { pick(false); if(location.hash==='#menu'){ location.hash=''; } setTimeout(()=>$('#menu').scrollIntoView({behavior:'smooth'}),50); };
+$('#catList').addEventListener('click', e => { const b = e.target.closest('button'); if(b) document.getElementById(b.dataset.go).scrollIntoView({behavior:'smooth'}); });
 // scroll spy for the categories that have items
 const spy = () => {
   const line = innerHeight*0.3; let cur = null;
@@ -609,5 +611,22 @@ const spy = () => {
   });
 };
 let raf; addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(spy); }, {passive:true});
+
+/* ---------- menu page ---------- */
+$('#mpJump').innerHTML = SECTIONS.map(s => `<button class="chip" type="button" data-mp="${s.id}">${s.name}</button>`).join('');
+$('#mpList').innerHTML = SECTIONS.map(s => `<section id="mp-${s.id}"><h2 class="d">${s.name}</h2>${s.lead?`<p class="sub2">${s.lead}</p>`:''}<ul>${s.items.map(i => `<li data-id="${i.id}"><div><div class="nm">${i.name}</div>${i.note?`<div class="nt">${i.note}</div>`:''}</div><div class="pr">${money(i.p)}${i.pf?`<span class="pf">With fries ${money(i.pf)}</span>`:''}</div><div class="acts"><button type="button" data-add="${i.id}|0">Add</button>${i.pf?`<button type="button" class="alt" data-add="${i.id}|1">Add with fries</button>`:''}</div></li>`).join('')}</ul></section>`).join('');
+$('#menuPage').addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b) return;
+  if(b.dataset.mp) return document.getElementById('mp-'+b.dataset.mp).scrollIntoView({behavior:'smooth'});
+  const [id,f] = b.dataset.add.split('|'); change(key(id,+f), 1); toast(ITEMS[id].name + (+f?' with fries':'') + ' added');
+});
+function view(){
+  const m = location.hash === '#menu';
+  $('#menuPage').hidden = !m;
+  ['.hero','.cats','main','.find'].forEach(q => $(q).hidden = m);
+  $('#mnBtn').toggleAttribute('aria-current', m); if(m) $('#mnBtn').setAttribute('aria-current','page');
+  if(m) scrollTo(0,0);
+}
+addEventListener('hashchange', view); view();
 setMode('delivery'); spy();
 </script>
