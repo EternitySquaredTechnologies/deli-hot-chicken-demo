@@ -115,11 +115,6 @@ main .in{padding-top:8px;padding-bottom:96px}
 .add:active{transform:scale(.96)}
 .add.ok{background:var(--fg);color:var(--bg)}
 
-.more{padding-top:48px}
-.more h2{margin:0 0 4px;font-size:clamp(36px,8vw,52px)}
-.more p{margin:0 0 16px;color:var(--muted);font-size:15px}
-.more ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
-.more li{padding:8px 14px;border-radius:999px;background:var(--sunk);font-size:14px;font-weight:500}
 .halal{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:8px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-weight:700;font-size:14px}
 
 /* footer */
@@ -385,7 +380,6 @@ $('#menu').innerHTML = SECTIONS.map(s => `<section class="sec" id="${s.id}"><h2 
 $('#megaIn').innerHTML = `<div><h3 class="live-h">Order online now</h3><ul class="live">${SECTIONS.map(s => `<li><button type="button" data-go="${s.id}">${s.name}</button></li>`).join('')}</ul></div>
   <div><h3>Full menu</h3><ul>${OTHER.map(n => `<li><button type="button" data-soon="${n}">${n}</button></li>`).join('')}</ul></div>`;
 $('#catList').innerHTML = SECTIONS.map(s => `<li><button class="chip" data-go="${s.id}">${s.name}</button></li>`).join('');
-$('#menu').insertAdjacentHTML('beforeend', `<section class="more"><h2 class="d">Also on our menu</h2><p>Not yet available to order here. Call (845) 303-3458.</p><ul>${OTHER.map(n => `<li>${n}</li>`).join('')}</ul></section>`);
 
 /* ---------- toast ---------- */
 let tt; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),2200); }
