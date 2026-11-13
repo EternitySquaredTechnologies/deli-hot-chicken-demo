@@ -102,6 +102,7 @@ main .in{padding-top:8px;padding-bottom:96px}
 .sec .lead{margin:0 0 16px;color:var(--muted);font-size:15px;min-height:22px}
 .seeall{display:flex;justify-content:center;padding-top:32px}
 .seeall .go{display:inline-flex;align-items:center;text-decoration:none;min-width:240px;justify-content:center}
+.pop .cb{gap:4px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 @media (min-width:700px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
 @media (min-width:1040px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
@@ -391,8 +392,8 @@ function card(it){
         <button class="add" type="button" aria-label="Add ${it.name}">Add</button></div>
     </div></article>`;
 }
-$('#menu').innerHTML = SECTIONS.filter(s => s.id==='special').map(s => `<section class="sec" id="${s.id}"><h2 class="d">${s.name}</h2>${s.lead?`<p class="lead">${s.lead}</p>`:'<p class="lead"></p>'}<div class="grid">${s.items.map(card).join('')}</div></section>`).join('');
-$('#menu').insertAdjacentHTML('beforeend','<div class="seeall"><a class="go" href="#menu">Order now</a></div>');
+const POPULAR = SECTIONS[0].items.slice(0, 5);
+$('#menu').innerHTML = `<section class="sec"><h2 class="d">Popular items</h2><p class="lead"></p><div class="grid pop">${POPULAR.map(i => `<article class="card"><div class="art">${art(i)}</div><div class="cb"><h3>${i.name}</h3><p class="note">${i.note}</p></div></article>`).join('')}</div><div class="seeall"><a class="go" href="#menu">Order now</a></div></section>`;
 
 /* ---------- toast ---------- */
 let tt; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),2200); }
